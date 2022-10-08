@@ -1,0 +1,3 @@
+# Parallel programming
+
+Laboratory works
