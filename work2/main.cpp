@@ -2,10 +2,8 @@
 #include <mpi.h>
 #include <math.h>
 
-// Variant 14
 double f(double x) {
     double x2 = x * x;
-    // approx integral from 0 to 1: ~2.505512
     return (sqrt(2 + x2)) / ((1+cos(2 * x)) * sqrt(1 - x2));
 }
 
