@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 
 	const double a = 0, b = 1;
 
-    // Step width
+	// Step width
 	double height = (b - a) / precision;
 
 	double ax = a + rank * (b - a) / size;
@@ -42,8 +42,8 @@ int main(int argc, char** argv) {
 	double result;
 	MPI_Reduce(&sum, &result, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
-    // Simple optimization: ((fa + fb) + (fa1 + fb1) + ...) * height / 2
-    result *= height / 2; 
+	// Simple optimization: ((fa + fb) + (fa1 + fb1) + ...) * height / 2
+	result *= height / 2; 
 	
 	if (rank == 0)
 		printf("Result = %f; timedelta = %f\n", result, MPI_Wtime() - start_ts);
