@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
 	
 	double start_ts = MPI_Wtime();
 
-	const int precision = 100000000;
+	const int precision = 1000000000;
 
 	const double a = 0, b = 1;
 
@@ -28,20 +28,25 @@ int main(int argc, char** argv) {
 
 	double ax = a + rank * (b - a) / size;
 
-	long double sum = 0;
+	double sum = 0;
+	double beforeF = f(ax), current = f(ax+height);
 	for (int i = 0; i < precision / size - 1; ++i) {   
-		sum += f(ax) + f(ax+height);
+		sum += beforeF + current;
+
+		beforeF = current;
+		current = f(ax+height);
+		
 		ax += height;
 	}
 		
-	long double result;
-	MPI_Reduce(&sum, &result, 1, MPI_LONG_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+	double result;
+	MPI_Reduce(&sum, &result, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
     // Simple optimization: ((fa + fb) + (fa1 + fb1) + ...) * height / 2
     result *= height / 2; 
 	
 	if (rank == 0)
-		printf("Result = %Lf; timedelta = %f\n", result, MPI_Wtime() - start_ts);
+		printf("Result = %f; timedelta = %f\n", result, MPI_Wtime() - start_ts);
 
 	MPI_Finalize();
 }
